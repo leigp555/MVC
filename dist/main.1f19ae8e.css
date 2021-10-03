@@ -1,0 +1,87 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+*::before,*::after{
+    box-sizing: border-box;
+}
+ol,ul{
+    list-style: none;
+}
+#function {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+
+}
+#function>section {
+    width: 50%;
+    height: 50vh;
+    border: 1px solid red;
+}
+
+
+#app1>div{
+    padding-top: 20px;
+}
+#app1>button {
+  padding: 10px 20px;
+    margin-top: 20px;
+}
+#content{
+   display: flex;
+
+}
+#content>li{
+    width: 50%;
+    border: 1px solid red;
+    text-align: center;
+}
+#content>li.selected{
+    background-color: yellow;
+    color: red;
+}
+#table>li{
+    display: none;
+}
+#table>li.active{
+    display: block;
+}
+#app3>div {
+    margin-top: 20vh;
+    margin-left: 10vh;
+    width: 5vw;
+    height: 5vw;
+    border: 1px solid black;
+    transition: transform 1s linear ;
+}
+
+#app3>div.active{
+  transform: translateX(15vw);
+}
+#app4 > div {
+    width: 10vw;
+    height: 10vw;
+    border: 1px solid red;
+    margin-top: 10vh;
+    margin-left: 20vh;
+    border-radius: 50%;
+
+}
+
+#app4 > div.active {
+  animation: x linear 1s alternate infinite;
+}
+
+@keyframes x {
+    0% {
+        background-color: red
+    }
+    100% {
+        background-color: black
+    }
+
+}
+
+/*# sourceMappingURL=/main.1f19ae8e.css.map */

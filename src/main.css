@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+*::before,*::after{
+    box-sizing: border-box;
+}
+ol,ul{
+    list-style: none;
+}
+#function {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+
+}
+#function>section {
+    width: 50%;
+    height: 50vh;
+    border: 1px solid red;
+}
+

@@ -1,0 +1,19 @@
+#content{
+   display: flex;
+
+}
+#content>li{
+    width: 50%;
+    border: 1px solid red;
+    text-align: center;
+}
+#content>li.selected{
+    background-color: yellow;
+    color: red;
+}
+#table>li{
+    display: none;
+}
+#table>li.active{
+    display: block;
+}

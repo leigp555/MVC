@@ -1,0 +1,23 @@
+#app4 > div {
+    width: 10vw;
+    height: 10vw;
+    border: 1px solid red;
+    margin-top: 10vh;
+    margin-left: 20vh;
+    border-radius: 50%;
+
+}
+
+#app4 > div.active {
+  animation: x linear 1s alternate infinite;
+}
+
+@keyframes x {
+    0% {
+        background-color: red
+    }
+    100% {
+        background-color: black
+    }
+
+}
