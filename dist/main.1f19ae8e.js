@@ -11289,54 +11289,170 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{"process":"../../../../AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"app1/app1.js":[function(require,module,exports) {
+},{"process":"../../../../AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"model/model.js":[function(require,module,exports) {
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Model = /*#__PURE__*/function () {
+  function Model(option) {
+    var _this = this;
+
+    _classCallCheck(this, Model);
+
+    ["data", "add", "delete", "updated", "look"].forEach(function (key) {
+      if (key in option) {
+        _this[key] = option[key];
+      }
+    });
+  }
+
+  _createClass(Model, [{
+    key: "delete",
+    value: function _delete() {
+      var _console, _console$error;
+
+      // console && console.error&&console.log("还没有创建")
+      (_console = console) === null || _console === void 0 ? void 0 : (_console$error = _console.error) === null || _console$error === void 0 ? void 0 : _console$error.call(_console, "还没有创建");
+    }
+  }, {
+    key: "add",
+    value: function add() {
+      var _console2, _console2$error;
+
+      (_console2 = console) === null || _console2 === void 0 ? void 0 : (_console2$error = _console2.error) === null || _console2$error === void 0 ? void 0 : _console2$error.call(_console2, "还没有创建");
+    }
+  }, {
+    key: "look",
+    value: function look() {
+      var _console3, _console3$error;
+
+      (_console3 = console) === null || _console3 === void 0 ? void 0 : (_console3$error = _console3.error) === null || _console3$error === void 0 ? void 0 : _console3$error.call(_console3, "还没有创建");
+    }
+  }, {
+    key: "updated",
+    value: function updated() {
+      var _console4, _console4$error;
+
+      (_console4 = console) === null || _console4 === void 0 ? void 0 : (_console4$error = _console4.error) === null || _console4$error === void 0 ? void 0 : _console4$error.call(_console4, "还没有创建");
+    }
+  }]);
+
+  return Model;
+}();
+
+var _default = Model;
+exports.default = _default;
+},{}],"app1/app1.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
 require("./app1.css");
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
+var _model = _interopRequireDefault(require("../model/model.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var n = localStorage.getItem("n" || 100);
-var $text = (0, _jquery.default)("#init").text(n);
-var $reset = (0, _jquery.default)("#reset");
-var $buttonA = (0, _jquery.default)("#buttonA");
-var $buttonB = (0, _jquery.default)("#buttonB");
-var $buttonC = (0, _jquery.default)("#buttonC");
-var $buttonD = (0, _jquery.default)("#buttonD");
-var number = parseInt($text.text());
-$buttonA.on("click", function () {
-  number = number + 1;
-  var string = JSON.stringify(number);
-  (0, _jquery.default)("#init").text(string);
-  localStorage.setItem("n", string);
-});
-$buttonB.on("click", function () {
-  number = number - 1;
-  var string = JSON.stringify(number);
-  (0, _jquery.default)("#init").text(string);
-  localStorage.setItem("n", string);
-});
-$buttonC.on("click", function () {
-  number = number * 2;
-  var string = JSON.stringify(number);
-  (0, _jquery.default)("#init").text(string);
-  localStorage.setItem("n", string);
-});
-$buttonD.on("click", function () {
-  number = number / 2;
-  var string = JSON.stringify(number);
-  (0, _jquery.default)("#init").text(string);
-  localStorage.setItem("n", string);
-});
-$reset.on("click", function () {
-  number = 100;
-  var string = JSON.stringify(number);
-  (0, _jquery.default)("#init").text(string);
-  localStorage.setItem("n", string);
-});
-},{"./app1.css":"app1/app1.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app2/app2.css":[function(require,module,exports) {
+//数据相关
+var eventBus = (0, _jquery.default)({});
+var m = new _model.default({
+  data: {
+    n: parseInt(localStorage.getItem("n")) || 100
+  },
+  updated: function updated(data) {
+    Object.assign(m.data, data);
+    eventBus.trigger("m:updated");
+    localStorage.setItem("n", JSON.stringify(m.data.n));
+  }
+}); // 方法一
+// m.updated=(data)=>{
+//     Object.assign(m.data, data)
+//     eventBus.trigger("m:updated")
+//     localStorage.setItem("n", JSON.stringify(m.data.n))
+// }
+//视图相关 V
+
+var v = {
+  el: null,
+  html: "\n    <div id=\"app1\">\n        <div id=\"init\">{data}</div>\n        <button id=\"reset\">\u91CD\u7F6E</button>\n        <button id=\"buttonA\">+1</button>\n        <button id=\"buttonB\">-1</button>\n        <button id=\"buttonC\">\xD72</button>\n        <button id=\"buttonD\">\xF72</button>\n    </div>",
+  init: function init(container) {
+    v.el = (0, _jquery.default)(container);
+  },
+  render: function render(n) {
+    if (v.el.children().length !== 0) v.el.empty();
+    (0, _jquery.default)(v.html.replace("{data}", JSON.stringify(n))).appendTo(v.el);
+  }
+}; //其他 C
+
+var c = {
+  init: function init(container) {
+    v.init(container);
+    v.render(m.data.n);
+    c.autoBindEvents();
+    eventBus.on("m:updated", function () {
+      v.render(m.data.n);
+    });
+  },
+  events: {
+    'click #buttonA': 'add',
+    'click #buttonB': 'minus',
+    'click #buttonC': 'mul',
+    'click #buttonD': 'div',
+    'click #reset': 'reset'
+  },
+  add: function add() {
+    m.updated({
+      n: m.data.n + 1
+    });
+  },
+  minus: function minus() {
+    m.updated({
+      n: m.data.n - 1
+    });
+  },
+  mul: function mul() {
+    m.updated({
+      n: m.data.n * 2
+    });
+  },
+  div: function div() {
+    m.updated({
+      n: m.data.n / 2
+    });
+  },
+  reset: function reset() {
+    m.updated({
+      n: 100
+    });
+  },
+  autoBindEvents: function autoBindEvents() {
+    for (var key in c.events) {
+      var spaceIndex = key.indexOf(" ");
+      var part1 = key.slice(0, spaceIndex);
+      var part2 = key.slice(spaceIndex + 1);
+      var value = c[c.events[key]];
+      v.el.on(part1, part2, value);
+    }
+  }
+};
+var _default = c;
+exports.default = _default;
+},{"./app1.css":"app1/app1.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js"}],"app2/app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11344,22 +11460,94 @@ module.hot.accept(reloadCSS);
 },{"_css_loader":"../../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app2/app2.js":[function(require,module,exports) {
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 require("./app2.css");
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
+var _model = _interopRequireDefault(require("../model/model.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var $content = (0, _jquery.default)("#content");
-var $table = (0, _jquery.default)("#table");
-$content.on("click", "li", function (e) {
-  var $li = (0, _jquery.default)(e.currentTarget);
-  $li.addClass("selected").siblings().removeClass("selected");
-  var index = $li.index();
-  $table.children().eq(index).addClass("active").siblings().removeClass("active");
-});
-$content.children().eq(0).trigger("click");
-},{"./app2.css":"app2/app2.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app3/app3.css":[function(require,module,exports) {
+var eventBus = (0, _jquery.default)({}); //数据相关 M
+
+var m = new _model.default({
+  data: {
+    index: parseInt(localStorage.getItem("m:index")) || 0
+  },
+  updated: function updated(data, y) {
+    Object.assign(m.data, data);
+    eventBus.trigger("m:updated");
+    localStorage.setItem("m:index", y);
+  }
+}); // const m = {
+//     data: {
+//         index: parseInt(localStorage.getItem("m:index")) || 0
+//     },
+//     add() {
+//     },
+//     delete() {
+//     },
+//     updated(data, y) {
+//         Object.assign(m.data, data)
+//         eventBus.trigger("m:updated")
+//         localStorage.setItem("m:index", y)
+//     },
+//     look() {
+//     }
+// }
+//视图相关 V
+
+var v = {
+  el: null,
+  html: function html(index) {
+    return "\n     <section id=\"app2\">\n        <ol id=\"content\">\n            <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=\"0\">contentA</li>\n            <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=\"1\">contentB</li>\n        </ol>\n        <ol id=\"table\">\n            <li class=\"").concat(index === 0 ? 'active' : '', "\">\u5185\u5BB9\u4E00</li>\n            <li class=\"").concat(index === 1 ? 'active' : '', "\">\u5185\u5BB9\u4E8C</li>\n        </ol>\n    </section>");
+  },
+  init: function init(container) {
+    v.el = (0, _jquery.default)(container);
+  },
+  render: function render(index) {
+    index = parseInt(index);
+    if (v.el.children().length !== 0) v.el.empty();
+    (0, _jquery.default)(v.html(index)).appendTo(v.el);
+  }
+}; //其他 C
+
+var c = {
+  init: function init(container) {
+    v.init(container);
+    v.render(m.data.index);
+    c.autoBindEvents();
+    eventBus.on("m:updated", function () {
+      v.render(m.data.index);
+    });
+  },
+  events: {
+    'click #content li': 'selected'
+  },
+  selected: function selected(e) {
+    var index = e.currentTarget.dataset.index;
+    m.updated({
+      index: index
+    }, index);
+  },
+  autoBindEvents: function autoBindEvents() {
+    for (var key in c.events) {
+      var spaceIndex = key.indexOf(" ");
+      var part1 = key.slice(0, spaceIndex);
+      var part2 = key.slice(spaceIndex + 1);
+      var value = c[c.events[key]];
+      v.el.on(part1, part2, value);
+    }
+  }
+};
+var _default = c;
+exports.default = _default;
+},{"./app2.css":"app2/app2.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js"}],"app3/app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11373,9 +11561,21 @@ require("./app3.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var html = " <section id=\"app3\">\n        <div id=\"square\"></div>\n    </section>";
+var $html = (0, _jquery.default)(html);
+$html.appendTo((0, _jquery.default)("#function"));
 var $square = (0, _jquery.default)("#square");
+var key = "app3_has";
+var n = localStorage.getItem(key) === "yes";
+$square.toggleClass("active", n);
 $square.on("click", function (e) {
-  $square.toggleClass("active");
+  if ($square.hasClass("active")) {
+    $square.removeClass("active");
+    localStorage.setItem(key, "no");
+  } else {
+    $square.addClass("active");
+    localStorage.setItem(key, "yes");
+  }
 });
 },{"jquery":"../node_modules/jquery/dist/jquery.js","./app3.css":"app3/app3.css"}],"app4/app4.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
@@ -11391,6 +11591,9 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var html = "\n  <section id=\"app4\">\n        <div id=\"change\"></div>\n    </section>";
+var $html = (0, _jquery.default)(html);
+$html.appendTo((0, _jquery.default)("#function"));
 var $change = (0, _jquery.default)("#change");
 $change.on("mouseenter", function () {
   $change.addClass("active");
@@ -11402,13 +11605,19 @@ $change.on("mouseenter", function () {
 
 require("./main.css");
 
-require("./app1/app1.js");
+var _app = _interopRequireDefault(require("./app1/app1.js"));
 
-require("./app2/app2.js");
+var _app2 = _interopRequireDefault(require("./app2/app2.js"));
 
 require("./app3/app3.js");
 
 require("./app4/app4.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_app.default.init("#function1");
+
+_app2.default.init("#function2");
 },{"./main.css":"main.css","./app1/app1.js":"app1/app1.js","./app2/app2.js":"app2/app2.js","./app3/app3.js":"app3/app3.js","./app4/app4.js":"app4/app4.js"}],"../../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -11437,7 +11646,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53420" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62339" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
