@@ -4,8 +4,9 @@ class Model {
             if (key in option) {
                 this[key] = option[key]
             }
-        })
-    }
+        },
+            this.data=option.data
+        )}
 
     delete() {
         // console && console.error&&console.log("还没有创建")

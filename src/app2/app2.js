@@ -3,6 +3,7 @@ import $ from "jquery"
 import Model from "../model/model.js";
 
 const eventBus = $({})
+
 //数据相关 M
 const m = new Model({
     data: {
@@ -16,22 +17,6 @@ const m = new Model({
 })
 
 
-// const m = {
-//     data: {
-//         index: parseInt(localStorage.getItem("m:index")) || 0
-//     },
-//     add() {
-//     },
-//     delete() {
-//     },
-//     updated(data, y) {
-//         Object.assign(m.data, data)
-//         eventBus.trigger("m:updated")
-//         localStorage.setItem("m:index", y)
-//     },
-//     look() {
-//     }
-// }
 //视图相关 V
 const v = {
     el: null,
