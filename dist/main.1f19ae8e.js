@@ -11310,12 +11310,8 @@ var View = /*#__PURE__*/function () {
     _classCallCheck(this, View);
 
     Object.assign(this, option);
-    this.events = option.events;
-    this.method = option.method;
-    this.el = option.el;
     this.render(this.data.n);
     this.autoBindEvents();
-    this.eventBus = option.eventBus;
     this.eventBus.on("m:updated", function () {
       _this.render(_this.data.n);
     });
@@ -11362,7 +11358,7 @@ var init = function init(el) {
     eventBus: eventBus,
     el: (0, _jquery.default)(el),
     data: {
-      n: parseInt(localStorage.getItem("n")) || 100
+      n: parseFloat(localStorage.getItem("n")) || 100
     },
     updated: function updated(data) {
       Object.assign(this.data, data);
@@ -11435,8 +11431,7 @@ var _view = _interopRequireDefault(require("../model/view"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var eventBus = (0, _jquery.default)({}); //数据相关 M
-//其他 C
+var eventBus = (0, _jquery.default)({});
 
 var init = function init(el) {
   var view = new _view.default({

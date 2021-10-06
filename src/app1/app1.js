@@ -8,7 +8,7 @@ const init = (el) => {
         eventBus: eventBus,
         el: $(el),
         data: {
-            n: parseInt(localStorage.getItem("n")) || 100
+            n: parseFloat(localStorage.getItem("n")) || 100
         },
         updated(data) {
             Object.assign(this.data, data)
