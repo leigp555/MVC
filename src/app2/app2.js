@@ -16,7 +16,7 @@ const m = new Model({
 })
 
 //其他 C
-const View = {
+const view = {
     el: null,
     html: (index) => {
         return `
@@ -32,17 +32,17 @@ const View = {
     </section>`
     },
     init(container) {
-        View.el = $(container)
-        View.render(m.data.index)
-        View.autoBindEvents()
+        view.el = $(container)
+        view.render(m.data.index)
+        view.autoBindEvents()
         eventBus.on("m:updated", () => {
-            View.render(m.data.index)
+            view.render(m.data.index)
         })
     },
     render(index) {
         index = parseInt(index)
-        if (View.el.children().length !== 0) View.el.empty()
-        $(View.html(index)).appendTo(View.el)
+        if (view.el.children().length !== 0) view.el.empty()
+        $(view.html(index)).appendTo(view.el)
     },
     events: {
         'click #content li': 'selected'
@@ -52,13 +52,13 @@ const View = {
         m.updated({index: index}, index)
     },
     autoBindEvents() {
-        for (let key in View.events) {
+        for (let key in view.events) {
             const spaceIndex = key.indexOf(" ")
             const part1 = key.slice(0, spaceIndex)
             const part2 = key.slice(spaceIndex + 1,)
-            const value = View[View.events[key]]
-            View.el.on(part1, part2, value)
+            const value = view[view.events[key]]
+            view.el.on(part1, part2, value)
         }
     }
 }
-export default View
+export default view

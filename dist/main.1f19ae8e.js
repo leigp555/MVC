@@ -11289,7 +11289,137 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{"process":"../../../../AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"model/model.js":[function(require,module,exports) {
+},{"process":"../../../../AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"model/view.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var View = /*#__PURE__*/function () {
+  function View(option) {
+    var _this = this;
+
+    _classCallCheck(this, View);
+
+    Object.assign(this, option);
+    this.events = option.events;
+    this.method = option.method;
+    this.el = option.el;
+    this.render(this.data.n);
+    this.autoBindEvents();
+    this.eventBus = option.eventBus;
+    this.eventBus.on("m:updated", function () {
+      _this.render(_this.data.n);
+    });
+  }
+
+  _createClass(View, [{
+    key: "autoBindEvents",
+    value: function autoBindEvents() {
+      for (var key in this.events) {
+        var spaceIndex = key.indexOf(" ");
+        var part1 = key.slice(0, spaceIndex);
+        var part2 = key.slice(spaceIndex + 1);
+        var value = this.method[this.events[key]];
+        this.el.on(part1, part2, value);
+      }
+    }
+  }]);
+
+  return View;
+}();
+
+var _default = View;
+exports.default = _default;
+},{}],"app1/app1.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+require("./app1.css");
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+var _view = _interopRequireDefault(require("../model/view"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var eventBus = (0, _jquery.default)({});
+
+var init = function init(el) {
+  var view = new _view.default({
+    eventBus: eventBus,
+    el: (0, _jquery.default)(el),
+    data: {
+      n: parseInt(localStorage.getItem("n")) || 100
+    },
+    updated: function updated(data) {
+      Object.assign(this.data, data);
+      this.eventBus.trigger("m:updated");
+      localStorage.setItem("n", JSON.stringify(this.data.n));
+    },
+    html: "\n    <div id=\"app1\">\n        <div id=\"init\">{data}</div>\n        <button id=\"reset\">\u91CD\u7F6E</button>\n        <button id=\"buttonA\">+1</button>\n        <button id=\"buttonB\">-1</button>\n        <button id=\"buttonC\">\xD72</button>\n        <button id=\"buttonD\">\xF72</button>\n    </div>",
+    render: function render(n) {
+      (0, _jquery.default)("<span>hello<span>").appendTo(this.el);
+      if (this.el.children().length !== 0) this.el.empty();
+      (0, _jquery.default)(this.html.replace("{data}", JSON.stringify(n))).appendTo(this.el);
+    },
+    events: {
+      'click #buttonA': 'add',
+      'click #buttonB': 'minus',
+      'click #buttonC': 'mul',
+      'click #buttonD': 'div',
+      'click #reset': 'reset'
+    },
+    method: {
+      add: function add() {
+        view.updated({
+          n: view.data.n + 1
+        });
+      },
+      minus: function minus() {
+        view.updated({
+          n: view.data.n - 1
+        });
+      },
+      mul: function mul() {
+        view.updated({
+          n: view.data.n * 2
+        });
+      },
+      div: function div() {
+        view.updated({
+          n: view.data.n / 2
+        });
+      },
+      reset: function reset() {
+        view.updated({
+          n: 100
+        });
+      }
+    }
+  });
+};
+
+var _default = init;
+exports.default = _default;
+},{"./app1.css":"app1/app1.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/view":"model/view.js"}],"app2/app2.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"model/model.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11352,99 +11482,7 @@ var Model = /*#__PURE__*/function () {
 
 var _default = Model;
 exports.default = _default;
-},{}],"app1/app1.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-require("./app1.css");
-
-var _jquery = _interopRequireDefault(require("jquery"));
-
-var _model = _interopRequireDefault(require("../model/model.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var eventBus = (0, _jquery.default)({});
-var m = new _model.default({
-  data: {
-    n: parseInt(localStorage.getItem("n")) || 100
-  },
-  updated: function updated(data) {
-    Object.assign(m.data, data);
-    eventBus.trigger("m:updated");
-    localStorage.setItem("n", JSON.stringify(m.data.n));
-  }
-}); //其他 C
-
-var View = {
-  el: null,
-  html: "\n    <div id=\"app1\">\n        <div id=\"init\">{data}</div>\n        <button id=\"reset\">\u91CD\u7F6E</button>\n        <button id=\"buttonA\">+1</button>\n        <button id=\"buttonB\">-1</button>\n        <button id=\"buttonC\">\xD72</button>\n        <button id=\"buttonD\">\xF72</button>\n    </div>",
-  init: function init(container) {
-    View.el = (0, _jquery.default)(container);
-    View.render(m.data.n);
-    View.autoBindEvents();
-    eventBus.on("m:updated", function () {
-      View.render(m.data.n);
-    });
-  },
-  render: function render(n) {
-    if (View.el.children().length !== 0) View.el.empty();
-    (0, _jquery.default)(View.html.replace("{data}", JSON.stringify(n))).appendTo(View.el);
-  },
-  events: {
-    'click #buttonA': 'add',
-    'click #buttonB': 'minus',
-    'click #buttonC': 'mul',
-    'click #buttonD': 'div',
-    'click #reset': 'reset'
-  },
-  add: function add() {
-    m.updated({
-      n: m.data.n + 1
-    });
-  },
-  minus: function minus() {
-    m.updated({
-      n: m.data.n - 1
-    });
-  },
-  mul: function mul() {
-    m.updated({
-      n: m.data.n * 2
-    });
-  },
-  div: function div() {
-    m.updated({
-      n: m.data.n / 2
-    });
-  },
-  reset: function reset() {
-    m.updated({
-      n: 100
-    });
-  },
-  autoBindEvents: function autoBindEvents() {
-    for (var key in View.events) {
-      var spaceIndex = key.indexOf(" ");
-      var part1 = key.slice(0, spaceIndex);
-      var part2 = key.slice(spaceIndex + 1);
-      var value = View[View.events[key]];
-      View.el.on(part1, part2, value);
-    }
-  }
-};
-var _default = View;
-exports.default = _default;
-},{"./app1.css":"app1/app1.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js"}],"app2/app2.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app2/app2.js":[function(require,module,exports) {
+},{}],"app2/app2.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11473,23 +11511,23 @@ var m = new _model.default({
   }
 }); //其他 C
 
-var View = {
+var view = {
   el: null,
   html: function html(index) {
     return "\n     <section id=\"app2\">\n        <ol id=\"content\">\n            <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=\"0\">contentA</li>\n            <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=\"1\">contentB</li>\n        </ol>\n        <ol id=\"table\">\n            <li class=\"").concat(index === 0 ? 'active' : '', "\">\u5185\u5BB9\u4E00</li>\n            <li class=\"").concat(index === 1 ? 'active' : '', "\">\u5185\u5BB9\u4E8C</li>\n        </ol>\n    </section>");
   },
   init: function init(container) {
-    View.el = (0, _jquery.default)(container);
-    View.render(m.data.index);
-    View.autoBindEvents();
+    view.el = (0, _jquery.default)(container);
+    view.render(m.data.index);
+    view.autoBindEvents();
     eventBus.on("m:updated", function () {
-      View.render(m.data.index);
+      view.render(m.data.index);
     });
   },
   render: function render(index) {
     index = parseInt(index);
-    if (View.el.children().length !== 0) View.el.empty();
-    (0, _jquery.default)(View.html(index)).appendTo(View.el);
+    if (view.el.children().length !== 0) view.el.empty();
+    (0, _jquery.default)(view.html(index)).appendTo(view.el);
   },
   events: {
     'click #content li': 'selected'
@@ -11501,16 +11539,16 @@ var View = {
     }, index);
   },
   autoBindEvents: function autoBindEvents() {
-    for (var key in View.events) {
+    for (var key in view.events) {
       var spaceIndex = key.indexOf(" ");
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex + 1);
-      var value = View[View.events[key]];
-      View.el.on(part1, part2, value);
+      var value = view[view.events[key]];
+      view.el.on(part1, part2, value);
     }
   }
 };
-var _default = View;
+var _default = view;
 exports.default = _default;
 },{"./app2.css":"app2/app2.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js"}],"app3/app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
@@ -11580,7 +11618,8 @@ require("./app4/app4.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_app.default.init("#function1");
+//
+(0, _app.default)("#function1");
 
 _app2.default.init("#function2");
 },{"./main.css":"main.css","./app1/app1.js":"app1/app1.js","./app2/app2.js":"app2/app2.js","./app3/app3.js":"app3/app3.js","./app4/app4.js":"app4/app4.js"}],"../../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -11611,7 +11650,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62708" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62339" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

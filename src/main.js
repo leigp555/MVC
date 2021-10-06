@@ -4,6 +4,10 @@ import y from "./app2/app2.js"
 import "./app3/app3.js"
 import "./app4/app4.js"
 
+//
+x("#function1")
 
-x.init("#function1")
+
+
+
 y.init("#function2")
