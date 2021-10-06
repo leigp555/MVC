@@ -1,18 +1,15 @@
 import "./app1.css"
 import $ from "jquery"
 import View from "../model/view";
-
-const eventBus = $({})
 const init = (el) => {
     const view = new View({
-        eventBus: eventBus,
         el: $(el),
         data: {
             n: parseFloat(localStorage.getItem("n")) || 100
         },
         updated(data) {
             Object.assign(this.data, data)
-            this.eventBus.trigger("m:updated")
+            this.trigger("m:updated")
             localStorage.setItem("n", JSON.stringify(this.data.n))
         },
         html: `

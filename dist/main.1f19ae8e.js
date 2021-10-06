@@ -11289,7 +11289,7 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{"process":"../../../../AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"model/view.js":[function(require,module,exports) {
+},{"process":"../../../../AppData/Local/Yarn/Data/global/node_modules/process/browser.js"}],"eventBus/eventBus.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11297,24 +11297,102 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var View = /*#__PURE__*/function () {
+var EventBus = /*#__PURE__*/function () {
+  function EventBus() {
+    _classCallCheck(this, EventBus);
+
+    this._eventbus = (0, _jquery.default)(window);
+  }
+
+  _createClass(EventBus, [{
+    key: "on",
+    value: function on(eventName, fn) {
+      return this._eventbus.on(eventName, fn);
+    }
+  }, {
+    key: "trigger",
+    value: function trigger(eventName, data) {
+      return this._eventbus.trigger(eventName, data);
+    }
+  }, {
+    key: "off",
+    value: function off(eventName, data) {
+      return this._eventbus.off(eventName, data);
+    }
+  }]);
+
+  return EventBus;
+}();
+
+var _default = EventBus;
+exports.default = _default;
+var eventbus = new EventBus();
+},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"model/view.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _eventBus = _interopRequireDefault(require("../eventBus/eventBus"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var View = /*#__PURE__*/function (_EventBus) {
+  _inherits(View, _EventBus);
+
+  var _super = _createSuper(View);
+
   function View(option) {
-    var _this = this;
+    var _this;
 
     _classCallCheck(this, View);
 
-    Object.assign(this, option);
-    this.render(this.data.n);
-    this.autoBindEvents();
-    this.eventBus.on("m:updated", function () {
+    _this = _super.call(this);
+    Object.assign(_assertThisInitialized(_this), option);
+
+    _this.render(_this.data.n);
+
+    _this.autoBindEvents();
+
+    _this.on("m:updated", function () {
       _this.render(_this.data.n);
     });
+
+    return _this;
   }
 
   _createClass(View, [{
@@ -11331,11 +11409,11 @@ var View = /*#__PURE__*/function () {
   }]);
 
   return View;
-}();
+}(_eventBus.default);
 
 var _default = View;
 exports.default = _default;
-},{}],"app1/app1.js":[function(require,module,exports) {
+},{"../eventBus/eventBus":"eventBus/eventBus.js"}],"app1/app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11351,18 +11429,15 @@ var _view = _interopRequireDefault(require("../model/view"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var eventBus = (0, _jquery.default)({});
-
 var init = function init(el) {
   var view = new _view.default({
-    eventBus: eventBus,
     el: (0, _jquery.default)(el),
     data: {
       n: parseFloat(localStorage.getItem("n")) || 100
     },
     updated: function updated(data) {
       Object.assign(this.data, data);
-      this.eventBus.trigger("m:updated");
+      this.trigger("m:updated");
       localStorage.setItem("n", JSON.stringify(this.data.n));
     },
     html: "\n    <div id=\"app1\">\n        <div id=\"init\">{data}</div>\n        <button id=\"reset\">\u91CD\u7F6E</button>\n        <button id=\"buttonA\">+1</button>\n        <button id=\"buttonB\">-1</button>\n        <button id=\"buttonC\">\xD72</button>\n        <button id=\"buttonD\">\xF72</button>\n    </div>",
@@ -11431,18 +11506,15 @@ var _view = _interopRequireDefault(require("../model/view"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var eventBus = (0, _jquery.default)({});
-
 var init = function init(el) {
   var view = new _view.default({
     el: (0, _jquery.default)(el),
-    eventBus: eventBus,
     data: {
       n: parseInt(localStorage.getItem("m:index")) || 0
     },
     updated: function updated(data, y) {
       Object.assign(this.data, data);
-      eventBus.trigger("m:updated");
+      this.trigger("m:updated");
       localStorage.setItem("m:index", y);
     },
     html: function html(index) {
