@@ -11411,34 +11411,7 @@ var m = new _model.default({
     eventBus.trigger("m:updated");
     localStorage.setItem("n", JSON.stringify(m.data.n));
   }
-}); // 方法一
-// m.updated=(data)=>{
-//     Object.assign(m.data, data)
-//     eventBus.trigger("m:updated")
-//     localStorage.setItem("n", JSON.stringify(m.data.n))
-// }
-//视图相关 V
-// const v = {
-//     el: null,
-//     html: `
-//     <div id="app1">
-//         <div id="init">{data}</div>
-//         <button id="reset">重置</button>
-//         <button id="buttonA">+1</button>
-//         <button id="buttonB">-1</button>
-//         <button id="buttonC">×2</button>
-//         <button id="buttonD">÷2</button>
-//     </div>`,
-//     init(container) {
-//         v.el = $(container)
-//     },
-//     render(n) {
-//         if (v.el.children().length !== 0) v.el.empty()
-//         $(v.html.replace("{data}", JSON.stringify(n))).appendTo(v.el)
-//     }
-// }
-//其他 C
-
+});
 var c = {
   v: null,
   container: null,
@@ -11528,6 +11501,8 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 var _model = _interopRequireDefault(require("../model/model.js"));
 
+var _view = _interopRequireDefault(require("../model/view"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventBus = (0, _jquery.default)({}); //数据相关 M
@@ -11541,30 +11516,35 @@ var m = new _model.default({
     eventBus.trigger("m:updated");
     localStorage.setItem("m:index", y);
   }
-}); //视图相关 V
-
-var v = {
-  el: null,
-  html: function html(index) {
-    return "\n     <section id=\"app2\">\n        <ol id=\"content\">\n            <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=\"0\">contentA</li>\n            <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=\"1\">contentB</li>\n        </ol>\n        <ol id=\"table\">\n            <li class=\"").concat(index === 0 ? 'active' : '', "\">\u5185\u5BB9\u4E00</li>\n            <li class=\"").concat(index === 1 ? 'active' : '', "\">\u5185\u5BB9\u4E8C</li>\n        </ol>\n    </section>");
-  },
-  init: function init(container) {
-    v.el = (0, _jquery.default)(container);
-  },
-  render: function render(index) {
-    index = parseInt(index);
-    if (v.el.children().length !== 0) v.el.empty();
-    (0, _jquery.default)(v.html(index)).appendTo(v.el);
-  }
-}; //其他 C
+}); //其他 C
 
 var c = {
+  v: null,
+  container: null,
+  initV: function initV() {
+    c.v = new _view.default({
+      el: c.container,
+      html: function html(index) {
+        return "\n     <section id=\"app2\">\n        <ol id=\"content\">\n            <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=\"0\">contentA</li>\n            <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=\"1\">contentB</li>\n        </ol>\n        <ol id=\"table\">\n            <li class=\"").concat(index === 0 ? 'active' : '', "\">\u5185\u5BB9\u4E00</li>\n            <li class=\"").concat(index === 1 ? 'active' : '', "\">\u5185\u5BB9\u4E8C</li>\n        </ol>\n    </section>");
+      },
+      init: function init(container) {
+        c.v.el = (0, _jquery.default)(container);
+      },
+      render: function render(index) {
+        index = parseInt(index);
+        if (c.v.el.children().length !== 0) c.v.el.empty();
+        (0, _jquery.default)(c.v.html(index)).appendTo(c.v.el);
+      }
+    });
+    c.v.init(c.container);
+    c.v.render(m.data.index);
+  },
   init: function init(container) {
-    v.init(container);
-    v.render(m.data.index);
+    c.container = container;
+    c.initV();
     c.autoBindEvents();
     eventBus.on("m:updated", function () {
-      v.render(m.data.index);
+      c.v.render(m.data.index);
     });
   },
   events: {
@@ -11582,13 +11562,13 @@ var c = {
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex + 1);
       var value = c[c.events[key]];
-      v.el.on(part1, part2, value);
+      c.v.el.on(part1, part2, value);
     }
   }
 };
 var _default = c;
 exports.default = _default;
-},{"./app2.css":"app2/app2.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js"}],"app3/app3.css":[function(require,module,exports) {
+},{"./app2.css":"app2/app2.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js","../model/view":"model/view.js"}],"app3/app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11687,7 +11667,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62339" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62199" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -4,7 +4,6 @@ import Model from "../model/model.js";
 import View from "../model/view";
 
 const eventBus = $({})
-
 //数据相关
 const m = new Model({
     data: {
@@ -16,35 +15,7 @@ const m = new Model({
         localStorage.setItem("n", JSON.stringify(m.data.n))
     }
 })
-// 方法一
-// m.updated=(data)=>{
-//     Object.assign(m.data, data)
-//     eventBus.trigger("m:updated")
-//     localStorage.setItem("n", JSON.stringify(m.data.n))
-// }
 
-
-//视图相关 V
-// const v = {
-//     el: null,
-//     html: `
-//     <div id="app1">
-//         <div id="init">{data}</div>
-//         <button id="reset">重置</button>
-//         <button id="buttonA">+1</button>
-//         <button id="buttonB">-1</button>
-//         <button id="buttonC">×2</button>
-//         <button id="buttonD">÷2</button>
-//     </div>`,
-//     init(container) {
-//         v.el = $(container)
-//     },
-//     render(n) {
-//         if (v.el.children().length !== 0) v.el.empty()
-//         $(v.html.replace("{data}", JSON.stringify(n))).appendTo(v.el)
-//     }
-// }
-//其他 C
 const c = {
     v: null,
     container: null,

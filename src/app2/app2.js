@@ -1,6 +1,7 @@
 import "./app2.css"
 import $ from "jquery"
 import Model from "../model/model.js";
+import View from "../model/view";
 
 const eventBus = $({})
 
@@ -17,11 +18,16 @@ const m = new Model({
 })
 
 
-//视图相关 V
-const v = {
-    el: null,
-    html: (index) => {
-        return `
+
+//其他 C
+const c = {
+    v:null,
+    container:null,
+    initV(){
+        c.v=new View({
+            el: c.container,
+            html: (index) => {
+                return `
      <section id="app2">
         <ol id="content">
             <li class="${index === 0 ? 'selected' : ''}" data-index="0">contentA</li>
@@ -32,24 +38,25 @@ const v = {
             <li class="${index === 1 ? 'active' : ''}">内容二</li>
         </ol>
     </section>`
+            },
+            init(container) {
+                c.v.el = $(container)
+            },
+            render(index) {
+                index = parseInt(index)
+                if (c.v.el.children().length !== 0) c.v.el.empty()
+                $(c.v.html(index)).appendTo(c.v.el)
+            }
+        })
+        c.v.init(c.container)
+        c.v.render(m.data.index)
     },
     init(container) {
-        v.el = $(container)
-    },
-    render(index) {
-        index = parseInt(index)
-        if (v.el.children().length !== 0) v.el.empty()
-        $(v.html(index)).appendTo(v.el)
-    }
-}
-//其他 C
-const c = {
-    init(container) {
-        v.init(container)
-        v.render(m.data.index)
+        c.container=container
+        c.initV()
         c.autoBindEvents()
         eventBus.on("m:updated", () => {
-            v.render(m.data.index)
+            c.v.render(m.data.index)
         })
     },
     events: {
@@ -65,8 +72,9 @@ const c = {
             const part1 = key.slice(0, spaceIndex)
             const part2 = key.slice(spaceIndex + 1,)
             const value = c[c.events[key]]
-            v.el.on(part1, part2, value)
+            c.v.el.on(part1, part2, value)
         }
     }
 }
+
 export default c
