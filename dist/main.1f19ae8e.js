@@ -11352,37 +11352,7 @@ var Model = /*#__PURE__*/function () {
 
 var _default = Model;
 exports.default = _default;
-},{}],"model/view.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jquery = _interopRequireDefault(require("jquery"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var View = function View(_ref) {
-  var el = _ref.el,
-      html = _ref.html,
-      render = _ref.render,
-      init = _ref.init;
-
-  _classCallCheck(this, View);
-
-  this.el = el;
-  this.html = html;
-  this.render = render;
-  this.init = init;
-};
-
-var _default = View;
-exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app1/app1.js":[function(require,module,exports) {
+},{}],"app1/app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11396,12 +11366,9 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 var _model = _interopRequireDefault(require("../model/model.js"));
 
-var _view = _interopRequireDefault(require("../model/view"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var eventBus = (0, _jquery.default)({}); //数据相关
-
+var eventBus = (0, _jquery.default)({});
 var m = new _model.default({
   data: {
     n: parseInt(localStorage.getItem("n")) || 100
@@ -11411,32 +11378,22 @@ var m = new _model.default({
     eventBus.trigger("m:updated");
     localStorage.setItem("n", JSON.stringify(m.data.n));
   }
-});
-var c = {
-  v: null,
-  container: null,
-  initV: function initV() {
-    c.v = new _view.default({
-      el: c.container,
-      html: "\n    <div id=\"app1\">\n        <div id=\"init\">{data}</div>\n        <button id=\"reset\">\u91CD\u7F6E</button>\n        <button id=\"buttonA\">+1</button>\n        <button id=\"buttonB\">-1</button>\n        <button id=\"buttonC\">\xD72</button>\n        <button id=\"buttonD\">\xF72</button>\n    </div>",
-      render: function render(n) {
-        if (c.v.el.children().length !== 0) c.v.el.empty();
-        (0, _jquery.default)(c.v.html.replace("{data}", JSON.stringify(n))).appendTo(c.v.el);
-      },
-      init: function init() {
-        c.v.el = (0, _jquery.default)(c.container);
-      }
-    });
-    c.v.init();
-    c.v.render(m.data.n);
-  },
+}); //其他 C
+
+var View = {
+  el: null,
+  html: "\n    <div id=\"app1\">\n        <div id=\"init\">{data}</div>\n        <button id=\"reset\">\u91CD\u7F6E</button>\n        <button id=\"buttonA\">+1</button>\n        <button id=\"buttonB\">-1</button>\n        <button id=\"buttonC\">\xD72</button>\n        <button id=\"buttonD\">\xF72</button>\n    </div>",
   init: function init(container) {
-    c.container = container;
-    c.initV();
-    c.autoBindEvents();
+    View.el = (0, _jquery.default)(container);
+    View.render(m.data.n);
+    View.autoBindEvents();
     eventBus.on("m:updated", function () {
-      c.v.render(m.data.n);
+      View.render(m.data.n);
     });
+  },
+  render: function render(n) {
+    if (View.el.children().length !== 0) View.el.empty();
+    (0, _jquery.default)(View.html.replace("{data}", JSON.stringify(n))).appendTo(View.el);
   },
   events: {
     'click #buttonA': 'add',
@@ -11471,23 +11428,53 @@ var c = {
     });
   },
   autoBindEvents: function autoBindEvents() {
-    for (var key in c.events) {
+    for (var key in View.events) {
       var spaceIndex = key.indexOf(" ");
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex + 1);
-      var value = c[c.events[key]];
-      c.v.el.on(part1, part2, value);
+      var value = View[View.events[key]];
+      View.el.on(part1, part2, value);
     }
   }
 };
-var _default = c;
+var _default = View;
 exports.default = _default;
-},{"./app1.css":"app1/app1.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js","../model/view":"model/view.js"}],"app2/app2.css":[function(require,module,exports) {
+},{"./app1.css":"app1/app1.css","jquery":"../node_modules/jquery/dist/jquery.js","../model/model.js":"model/model.js"}],"app2/app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"app2/app2.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/css-loader.js"}],"model/view.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var View = function View(_ref) {
+  var el = _ref.el,
+      html = _ref.html,
+      render = _ref.render,
+      init = _ref.init;
+
+  _classCallCheck(this, View);
+
+  this.el = el;
+  this.html = html;
+  this.render = render;
+  this.init = init;
+};
+
+var _default = View;
+exports.default = _default;
+},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app2/app2.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11667,7 +11654,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62199" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62708" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
